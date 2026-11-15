@@ -19,11 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate page
-        run: python3 validate.py
+        run: |
+          python3 validate.py
+          node validate-interactions.js
+          rustc --edition=2021 --test reference.rs -o /tmp/lesson-tests
+          /tmp/lesson-tests
       - name: Prepare public files only
         run: |
           mkdir _site
-          cp index.html _site/index.html
+          cp index.html lesson-02.html starter.rs reference.rs _site/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
