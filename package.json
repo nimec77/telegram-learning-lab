@@ -1,0 +1,11 @@
+{
+  "name": "telegram-learning-lab",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node validate-interactions.js"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
+}

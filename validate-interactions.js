@@ -1,20 +1,35 @@
-// Offline handler checks. This does not replace visual browser QA.
-const fs = require('fs'); const vm = require('vm'); const assert = require('assert');
-const html = fs.readFileSync('lesson-02.html', 'utf8');
-const elements = new Map();
-for (const match of html.matchAll(/id="([^"]+)"/g)) elements.set(match[1], { value: '', checked: false, textContent: '', style: {}, setAttribute() {} });
-const checks = Array.from(html.matchAll(/data-progress="([^"]+)"/g), m => ({checked:false,dataset:{progress:m[1]}}));
-const progress = {setAttribute(){}};
-const document = {getElementById:id=>elements.get(id),querySelectorAll:()=>checks,querySelector:()=>progress};
-vm.runInNewContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], {document,localStorage:{getItem:()=>null,setItem(){}},setTimeout,URL,Blob});
-const e=id=>elements.get(id);const run=()=>{e('run').onclick();return e('result').textContent};
-e('reset').onclick();assert.match(run(), /Preview/);assert.match(run(), /calls: 0/);
-e('mode').value='dispatch';e('outcome').value='sent';assert.match(run(), /Sent: receipt 42/);assert.match(run(), /calls: 1/);
-e('outcome').value='unknown';assert.match(run(), /Unknown/);assert.match(run(), /calls: 1/);
-e('outcome').value='refused';assert.match(run(), /NotSent: definitive refusal/);
-e('enabled').checked=false;assert.match(run(), /NotSent: disabled/);assert.match(run(), /calls: 0/);
-e('reset').onclick();e('destination').value='other';assert.match(run(), /NotSent: destination/);
-e('reset').onclick();e('text').value='   ';assert.match(run(), /NotSent: text/);
-e('reset').onclick();e('emoji').onclick();assert.match(run(), /NotSent: text/);
-e('reset').onclick();e('text').value='😀'.repeat(2048);assert.match(run(), /Preview/);
-console.log('PASS: 9 offline UI state scenarios');
+// Parse the real page before exercising its handlers. No fake DOM/value injection.
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+const { JSDOM } = require('jsdom');
+const dom = new JSDOM(fs.readFileSync('lesson-02.html', 'utf8'), {
+  runScripts: 'dangerously', url: 'https://example.invalid/lesson-02.html'
+});
+const e = id => dom.window.document.getElementById(id);
+const select = (id, value) => {
+  const control = e(id);
+  assert.ok([...control.options].some(o => o.value === value && !o.disabled), `${id}: selectable ${value} option required`);
+  control.value = value;
+  assert.equal(control.value, value);
+  control.dispatchEvent(new dom.window.Event('change', { bubbles: true }));
+};
+const run = (result, calls) => {
+  e('run').click();
+  assert.equal(e('result').textContent, `${result}\nFake sender calls: ${calls}\nReal network calls: 0`);
+};
+assert.deepEqual([...e('mode').options].map(o => o.value), ['preview', 'dispatch']);
+assert.deepEqual([...e('outcome').options].map(o => o.value), ['sent', 'refused', 'unknown']);
+select('mode', 'preview'); run('Preview: no dispatch', 0);
+select('mode', 'dispatch'); select('outcome', 'sent'); run('Sent: receipt 42', 1);
+select('outcome', 'unknown'); run('Unknown: no automatic retry', 1);
+run('Unknown: no automatic retry', 1); // Repeated clicks still make one attempt per run.
+select('outcome', 'refused'); run('NotSent: definitive refusal', 1);
+select('mode', 'preview'); run('Preview: no dispatch', 0);
+e('enabled').checked = false; run('NotSent: disabled', 0);
+e('reset').click(); assert.equal(e('mode').value, 'preview'); assert.equal(e('outcome').value, 'sent');
+e('destination').value = 'other'; run('NotSent: destination', 0);
+e('reset').click(); e('text').value = '   '; run('NotSent: text', 0);
+e('reset').click(); e('emoji').click(); run('NotSent: text', 0);
+e('reset').click(); e('text').value = '😀'.repeat(2048); run('Preview: no dispatch', 0);
+dom.window.close();
+console.log('PASS: parsed selectable modes and 11 UI state scenarios');

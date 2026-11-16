@@ -15,4 +15,4 @@ Add self-contained lesson HTML files and link them from the course roadmap. Do n
 Run `python3 validate.py` for basic structural and privacy checks. Browser QA is also needed for responsive layout and interactions.
 
 ## Lesson 02
-Open `lesson-02.html` for the offline safe text-send lab. It includes starter and reference Rust downloads, eight tests, an interactive outcome model and pinned source comparisons. `reference.rs` is a teaching model, not a Telegram client. Run `node validate-interactions.js` for offline handler checks and `rustc --edition=2021 --test reference.rs -o /tmp/lesson-tests && /tmp/lesson-tests` for Rust tests.
+Open `lesson-02.html` for the offline safe text-send lab. It includes starter and reference Rust downloads, eight tests, an interactive outcome model and pinned source comparisons. `reference.rs` is a teaching model, not a Telegram client. Run `npm ci` once, then `npm test` for HTML-parsed DOM interaction checks (including selectable modes, receipts and lost responses) and `rustc --edition=2021 --test reference.rs -o /tmp/lesson-tests && /tmp/lesson-tests` for Rust tests.
