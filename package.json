@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node validate-interactions.js"
+    "test": "node validate-interactions.js && node test-lesson-03.cjs && node test-downloads.cjs"
   },
   "devDependencies": {
     "jsdom": "26.1.0"
   }
 }
+

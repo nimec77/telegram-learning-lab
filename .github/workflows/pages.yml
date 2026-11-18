@@ -26,13 +26,23 @@ jobs:
       - name: Validate page
         run: |
           python3 validate.py
-          node validate-interactions.js
+          npm test
           rustc --edition=2021 --test reference.rs -o /tmp/lesson-tests
           /tmp/lesson-tests
+          rustc --edition=2021 --test lesson-03-reference.rs -o /tmp/lesson03-tests
+          /tmp/lesson03-tests
+          rustc --edition=2021 --test lesson-03-starter.rs -o /tmp/lesson03-starter-tests
+          if /tmp/lesson03-starter-tests > /tmp/lesson03-starter-output.txt 2>&1; then
+            echo "Starter unexpectedly passed before implementation"
+            exit 1
+          fi
+          grep -q "0 passed; 10 failed" /tmp/lesson03-starter-output.txt
+          grep -q "not yet implemented" /tmp/lesson03-starter-output.txt
+          echo "PASS: starter compiles and all ten tests fail at the exercise placeholder"
       - name: Prepare public files only
         run: |
           mkdir _site
-          cp index.html lesson-02.html starter.rs reference.rs _site/
+          cp index.html lesson-02.html lesson-03.html starter.rs reference.rs lesson-03-starter.rs lesson-03-reference.rs _site/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
@@ -41,3 +51,4 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
