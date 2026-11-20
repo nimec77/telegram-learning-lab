@@ -22,3 +22,8 @@ Open `lesson-02.html` for the offline safe text-send lab. It includes starter an
 Open `lesson-03.html` for media preparation and file boundaries. This self-contained lesson has a synthetic preflight simulator, notes, and embedded Rust starter/reference downloads. The teaching model never opens files, uploads media, or connects to Telegram. `Ready` is not a delivery receipt.
 
 Run `npm test` for parsed-DOM interaction/download checks and `rustc --edition=2021 --test lesson-03-reference.rs -o /tmp/lesson03-tests && /tmp/lesson03-tests` for the ten Rust tests. The starter compiles but deliberately fails until its `todo!` is implemented. Deployment runs both reference tests and expected starter failures before publishing. Sources are pinned to the inspected connector commit.
+
+## Lesson 04
+Open `lesson-04.html` to practice routing fictional TeleShelf support commands. A pure Rust policy selects a static draft or reports a reason for human review. The self-contained simulator does not send messages, notify reviewers, or store input. It includes starter and reference downloads.
+
+Run `npm test` for offline simulator and download checks. Run `rustc --edition=2021 --test lesson-04-reference.rs -o /tmp/lesson04-tests && /tmp/lesson04-tests` for the 18 Rust tests. The starter intentionally fails at its `todo!` until implemented.
