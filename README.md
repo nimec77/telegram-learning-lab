@@ -27,3 +27,6 @@ Run `npm test` for parsed-DOM interaction/download checks and `rustc --edition=2
 Open `lesson-04.html` to practice routing fictional TeleShelf support commands. A pure Rust policy selects a static draft or reports a reason for human review. The self-contained simulator does not send messages, notify reviewers, or store input. It includes starter and reference downloads.
 
 Run `npm test` for offline simulator and download checks. Run `rustc --edition=2021 --test lesson-04-reference.rs -o /tmp/lesson04-tests && /tmp/lesson04-tests` for the 18 Rust tests. The starter intentionally fails at its `todo!` until implemented.
+
+## Lesson 05
+Open `lesson-05.html` for a 95-minute comparison of a fixed TeleShelf support reply and a model-written draft. The exercise keeps review and handoff in Rust, with no send function or Telegram connection; a simulated draft is an offline alternative.

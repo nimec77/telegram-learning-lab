@@ -52,7 +52,7 @@ jobs:
       - name: Prepare public files only
         run: |
           mkdir _site
-          cp index.html lesson-02.html lesson-03.html starter.rs reference.rs lesson-03-starter.rs lesson-03-reference.rs lesson-04.html lesson-04-starter.rs lesson-04-reference.rs _site/
+          cp index.html lesson-02.html lesson-03.html starter.rs reference.rs lesson-03-starter.rs lesson-03-reference.rs lesson-04.html lesson-04-starter.rs lesson-04-reference.rs lesson-05.html _site/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

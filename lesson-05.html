@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 5: Let AI write the draft. Keep control of what happens next.</title>
+<link rel="canonical" href="https://nimec77.github.io/telegram-learning-lab/lesson-05.html">
+<style>
+:root{color-scheme:light;--ink:#172b28;--muted:#455d57;--green:#22534c;--paper:#f5f4ea;--line:#c9d5cd;--card:#fffef9;--lime:#dafaab}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 system-ui,sans-serif}
+main,nav{max-width:830px;margin:auto;padding:0 24px}nav{padding-top:24px;padding-bottom:20px}a{color:#185851;text-underline-offset:.18em}
+header{background:var(--green);color:#fff;padding:38px 34px;border-radius:20px}header a{color:var(--lime)}
+h1,h2,h3{line-height:1.15}h1{font-size:clamp(2.2rem,7vw,4rem);margin:.18em 0}h2{font-size:1.75rem;margin:6px 0 14px}
+section{padding:30px 0;border-bottom:1px solid var(--line)}.over{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;font-weight:750}.muted{color:var(--muted)}
+.card,details{background:var(--card);padding:16px 20px;border:1px solid var(--line);border-radius:12px;margin:13px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid .card{margin:0}
+summary{font-weight:700;cursor:pointer}label{display:block;font-weight:650}textarea{width:100%;min-height:90px;resize:vertical;font:inherit;padding:10px;margin:5px 0;border:1px solid #667c75;border-radius:8px}button{font:inherit;font-weight:700;cursor:pointer;color:white;background:#22534c;border:none;border-radius:8px;padding:8px 15px;margin:.25em .2em .25em 0}button.secondary{background:#e9efe7;color:var(--ink)}:focus-visible{outline:3px solid #a04900;outline-offset:2px}
+pre{overflow:auto;padding:14px;background:#182c28;color:#f0f5e8;border-radius:8px;font-size:.9rem;line-height:1.5}code{font-family:ui-monospace,monospace;overflow-wrap:anywhere}pre code{overflow-wrap:normal}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;border-bottom:1px solid var(--line);padding:8px;vertical-align:top}#out{white-space:pre-wrap;min-height:4.5em;border-left:5px solid #567d5e}
+footer{padding:25px 0;color:var(--muted)}@media(max-width:540px){main,nav{padding-left:14px;padding-right:14px}.grid{grid-template-columns:1fr}header{padding:24px 18px}}
+@media print{header{background:white;color:black;padding:10px 0}button,textarea,nav{display:none}section{break-inside:avoid}}
+</style></head><body>
+<nav aria-label="Lesson navigation"><a href="lesson-04.html">← Lesson 04</a> · <a href="index.html#course">Course roadmap</a></nav>
+<main>
+<header><div class="over">Telegram Learning Lab · Lesson 05</div><h1>Lesson 5: Let AI write the draft. Keep control of what happens next.</h1><p><strong>About 95 minutes.</strong> In <a href="lesson-04.html">Lesson 4</a>, Rust chose a fixed reply or a handoff. This time you’ll compare a fixed reply with a model-written draft. Your Rust code still decides whether the result goes to review or handoff. Nothing connects to Telegram, and there’s no send function.</p></header><section id="step-1"><h2>1. Learn the moving parts · 15 min</h2>
+<p>Read or watch <a href="https://www.3blue1brown.com/lessons/mini-llm/">3Blue1Brown’s short LLM introduction</a>. A <em>token</em> is a piece of text. The <em>context</em> is the input the model can use: instructions, facts, and the customer’s question. A <em>prompt</em> tells the model what to do with that input. Notice the difference between predicting a plausible next token and checking that a product claim is true.</p>
+</section>
+<section id="step-2"><h2>2. Compare two replies · 20 min</h2>
+<p>Use one verified fact from the <a href="https://github.com/nimec77/teleshelf-pro/releases/tag/v0.66.1">TeleShelf 0.66.1 release notes</a>: comment rows show the author’s Telegram photo when available and fall back to initials.</p>
+<p>Fictional customer: <em>“Some comments show letters instead of faces. Did I turn something off? I’m on 0.66.1.”</em></p>
+<p>Treat that release fact as your fixed reply. Then give the same fact and question to ChatGPT with these instructions: “Write a friendly support draft in two sentences. Use only the supplied fact. If the fact doesn’t answer the question, return HANDOFF. Don’t invent a setting or suggest a fix you can’t verify.”</p>
+<p>Compare the replies: Which answers the question more directly? Did the model add any claim the source doesn’t support? For an offline run, write a pretend model draft instead and label it as simulated.</p>
+</section>
+<section id="step-3"><h2>3. Put the draft behind a Rust boundary · 40 min</h2>
+<p>Extend your Lesson 4 exercise or use a tiny separate Rust module. Keep the model outside the app for now: paste its output into a test fixture. Your function should return either <code>ReviewDraft(text)</code> or <code>HandOff(reason)</code>, never a send instruction.</p>
+<p>Write tests for an eligible question with a nonblank draft, an explicit <code>HANDOFF</code>, blank output, a simulated model failure, and a question outside the supported topic. Keep the last case as a handoff even if a model offers a confident reply. Run <code>cargo test</code>.</p>
+</section>
+<section id="step-4"><h2>4. Catch one convincing mistake · 20 min</h2>
+<p>Feed in a bad draft: <em>“Go to Settings → Comments and turn on Show profile photos.”</em> Your code can recognize that it’s nonblank. It can’t establish that the setting exists. As reviewer, reject it and write one plain note: <em>“The draft invented a setting instead of explaining the automatic initials fallback.”</em> Then write the corrected reply.</p>
+</section>
+<section id="done">
+<p><strong>Done when:</strong> your tests pass, you’ve compared both replies, and you can explain why a draft can pass a Rust test and still need your review.</p>
+</section>
+<footer>Telegram Learning Lab · Lesson 05</footer>
+</main></body></html>
