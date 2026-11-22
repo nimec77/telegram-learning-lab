@@ -30,3 +30,6 @@ Run `npm test` for offline simulator and download checks. Run `rustc --edition=2
 
 ## Lesson 05
 Open `lesson-05.html` for a 95-minute comparison of a fixed TeleShelf support reply and a model-written draft. The exercise keeps review and handoff in Rust, with no send function or Telegram connection; a simulated draft is an offline alternative.
+
+## Lesson 06
+Open `lesson-06.html` for a 100-minute exercise using a supplied TeleShelf FAQ. Fictional tickets and typed Rust fixtures separate drafts for review, clarification and handoff. No sending or Telegram connection.
