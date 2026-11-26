@@ -33,3 +33,6 @@ Open `lesson-05.html` for a 95-minute comparison of a fixed TeleShelf support re
 
 ## Lesson 06
 Open `lesson-06.html` for a 100-minute exercise using a supplied TeleShelf FAQ. Fictional tickets and typed Rust fixtures separate drafts for review, clarification and handoff. No sending or Telegram connection.
+
+## Lesson 07
+Open `lesson-07.html` for a 105-minute offline Rust retrieval lab: exact version filtering, keyword scoring, tie clarification, and handoff when evidence is missing. Fictional tickets only; no model API, Telegram connection or sending.
